@@ -38,21 +38,20 @@
     <link rel="stylesheet" href="./css/style_p.css">
 </head>
 <?php
-    include_once '../helpers/format.php';
     include_once '../lib/database.php';
+    include_once '../lib/session.php';
+    include_once '../helpers/format.php';
     include_once './include/header.php';
-    // Session::init();
-?>
-<?php
+
+    Session::init();
+
+    spl_autoload_register(function($callName){
+        include_once "../classes/".$callName.'.php';
+    });
     $customer = new Customer();
-    if(Session::get('customer_login')){
-        echo "<script>window.location.href='index.php'</script>";
-    }
-    if(isset($_POST['dangnhap'])){
-        // $kiem_tra = $_POST['kiem_tra'];
-        $ten_dang_nhap = $_POST['ten_dang_nhap'];
-        $mat_khau = md5($_POST['mat_khau']);
-        $login = $customer->login($ten_dang_nhap,$mat_khau);
+    if(isset($_POST['quen_mat_khau'])){
+        $email = $_POST['email'];
+        $forgot_password = $customer -> forgot_password($email);
     }
 ?>
 <section class="vh-100" style="padding-top:100px">
@@ -65,43 +64,27 @@
         <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
             <form action="" method="POST">
             <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start" style="margin-bottom: 20px;">
-                <p class="lead fw-normal mb-0 me-3" >Đăng nhập</p>
+                <p class="lead fw-normal mb-0 me-3" >Quên mật khẩu</p>
             </div>
 
             <!-- Email input -->
             <div class="form-outline mb-4">
-                <label class="form-label" for="form3Example3">Email </label>
+                <label class="form-label" for="form3Example3">Email</label>
                 <input type="text" id="form3Example3" class="form-control form-control-lg"
-                    placeholder="Nhập email" name="ten_dang_nhap"/>
-            </div>
-
-            <!-- Password input -->
-            <div class="form-outline mb-3">
-                <label class="form-label" for="form3Example4">Mật khẩu</label>
-                <input type="password" id="form3Example4" class="form-control form-control-lg"
-                placeholder="Nhập mật khẩu" name="mat_khau"/>
+                    placeholder="Nhập địa chỉ email" name="email" />
             </div>
             <div class="form-outline mb-3">
                 <span style="padding: 10px;">
                     <?php
-                        if(isset($login)){
-                            echo $login;
+                        if(isset($forgot_password)){
+                            echo $forgot_password;
                         }
                     ?>
                 </span>
             </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <!-- Checkbox -->
-                <div class="form-check mb-0">
-                </div>
-                <a href="forgot_pass.php" class="text-body">Quên mật khẩu?</a>
-            </div>
-
             <div class="text-center text-lg-start mt-4 pt-2">
                 <input type="submit" class="btn btn-primary btn-lg"
-                style="padding-left: 2.5rem; padding-right: 2.5rem;" name="dangnhap" value="Login">
-                <p class="small fw-bold mt-2 pt-1 mb-0">Bạn chưa có tài khoản? <a href="register.php"
-                    class="link-danger">Đăng ký</a></p>
+                style="padding-left: 2.5rem; padding-right: 2.5rem;" name="quen_mat_khau" value="Tiếp theo">
             </div>
 
             </form>
