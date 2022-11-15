@@ -1,21 +1,16 @@
 <?php
-    include_once('../helpers/format.php');
-    include_once('../lib/database.php');
-
     class Contact{
-        private $db;
-        private $fm;
-
-        function __construct()
+        public $id;
+        public $name;
+        public $email;
+        public $phone;
+        
+        function __construct($id,$name,$email,$phone)
         {
-            $this->db = new Database();
-            $this->fm = new Format();
-        }
-
-        function get_contact(){
-            $query = "SELECT * FROM contact";
-            $result = $this->db->select($query);
-            return $result;
+            $this->id = $id;            
+            $this->name = $name;            
+            $this->email = $email;            
+            $this->phone = $phone;            
         }
     }
 ?>
